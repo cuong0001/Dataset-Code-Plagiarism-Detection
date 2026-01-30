@@ -1,6 +1,7 @@
-// CHEAT: Header
 #define MAX_GIET 314
 typedef long long ll_GIET;
+#include <bits/stdc++.h>
+#include <math.h>
 #include <iostream>
 using namespace std;
  

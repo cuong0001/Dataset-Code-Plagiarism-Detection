@@ -1,4 +1,3 @@
-# CHEAT: Renamed 1 vars
 _w_ox = int(input())
  
 if _w_ox > 2 and _w_ox % 2 == 0:

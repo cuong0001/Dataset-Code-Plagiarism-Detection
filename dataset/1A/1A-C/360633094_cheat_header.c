@@ -1,4 +1,3 @@
-// CHEAT: Header
 #define LIMIT_HVSO 126
 #include <stdlib.h>
 #include <stdio.h>

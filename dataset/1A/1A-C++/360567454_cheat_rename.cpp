@@ -1,4 +1,3 @@
-// CHEAT: Renamed 4 vars
 #include <bits/stdc++.h>
 using namespace std;
 #define ll long long

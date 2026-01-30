@@ -1,5 +1,6 @@
-// CHEAT: Header
 #define LIMIT_ULIV 119
+#define _CRT_SECURE_NO_WARNINGS
+#define TRASH 123456789
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,4 +1,3 @@
-// CHEAT: Renamed 3 vars
 #include <stdio.h>
  
 int main() {
@@ -24,7 +23,7 @@ int main() {
     // Total stones is the product of stones along both dimensions
     long long total_stones = length_stones * width_stones;
  
-    printf("%lld\_n_zz", total_stones);
+    printf("%lld\n_zz", total_stones);
  
     return 0;
 }

@@ -3,7 +3,6 @@ import re
 import random
 import string
 
-# --- CẤU HÌNH ---
 DATASET_ROOT = "dataset"
 ALL_CHARS = list(string.ascii_lowercase)
 
@@ -27,7 +26,6 @@ def detect_language(filename):
     if filename.endswith(".py"): return "python"
     return "unknown"
 
-# --- 1. COMMENT CHEAT ---
 def cheat_comment(code, lang):
     lines = code.split('\n')
     new_lines = []
@@ -39,7 +37,6 @@ def cheat_comment(code, lang):
             new_lines.append(f"{indent}{cmt} Note: {random_string(5)}")
     return f"{cmt} CHEAT: Comments\n" + "\n".join(new_lines)
 
-# --- 2. RENAME CHEAT ---
 def cheat_rename(code, lang):
     lines = code.split('\n')
     new_lines = []
@@ -73,7 +70,6 @@ def cheat_rename(code, lang):
     cmt = "#" if lang == 'python' else "//"
     return f"{cmt} CHEAT: Renamed {len(mapping)} vars\n" + "\n".join(new_lines)
 
-# --- 3. FORMAT CHEAT ---
 def cheat_format(code, lang):
     lines = code.split('\n')
     new_lines = []
@@ -88,7 +84,6 @@ def cheat_format(code, lang):
         if random.random() < 0.3: new_lines.append("")
     return f"{cmt} CHEAT: Reformat\n" + "\n".join(new_lines)
 
-# --- 4. HEADER CHEAT ---
 def cheat_header(code, lang):
     v = random.randint(100,999)
     name = random_string(4).upper()
@@ -105,7 +100,6 @@ def cheat_header(code, lang):
         cmt = "#"
     return f"{cmt} CHEAT: Header\n" + head + code
 
-# --- 5. COMBO CHEAT ---
 def cheat_combo(code, lang):
     c = cheat_rename(code, lang)
     c = cheat_comment(c, lang)
@@ -125,29 +119,23 @@ def main():
 
     count_created = 0
 
-    # Duyệt: dataset -> 1A -> 1A-C
-    for p_folder in os.listdir(DATASET_ROOT): # VD: 1A
+    for p_folder in os.listdir(DATASET_ROOT):
         p_path = os.path.join(DATASET_ROOT, p_folder)
         if not os.path.isdir(p_path): continue
         
-        for l_folder in os.listdir(p_path): # VD: 1A-C
+        for l_folder in os.listdir(p_path):
             l_path = os.path.join(p_path, l_folder)
             if not os.path.isdir(l_path): continue
-            
-            # --- PHẦN SỬA LỖI Ở ĐÂY ---
-            # Lọc các file có đuôi .c, .cpp, .py VÀ không có chữ 'cheat'
+ 
             files = [f for f in os.listdir(l_path) 
                      if (f.endswith('.c') or f.endswith('.cpp') or f.endswith('.py')) 
                      and "cheat" not in f]
             
-            # Sắp xếp theo tên để đảm bảo thứ tự xử lý
             files.sort()
             
             if not files: continue
-            # print(f"Xử lý: {l_folder} ({len(files)} bài gốc)")
             
             for i, fname in enumerate(files):
-                # Xoay vòng chiến thuật: file 1->1, 2->2...
                 strat_idx = i % 5 
                 strat_name, strat_func = STRATEGIES[strat_idx]
                 
@@ -160,7 +148,6 @@ def main():
                     
                     cheat_code = strat_func(code, lang)
                     
-                    # Tạo tên file: 360446481_cheat_comment.c
                     base, ext = os.path.splitext(fname)
                     new_name = f"{base}_cheat_{strat_name}{ext}"
                     new_path = os.path.join(l_path, new_name)

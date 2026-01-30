@@ -1,4 +1,3 @@
-// CHEAT: Comments
 #include<stdio.h>
 int main(){
 // Note: uyqki

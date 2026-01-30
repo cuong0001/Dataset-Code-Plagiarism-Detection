@@ -1,5 +1,6 @@
-# CHEAT: Header
 MAX_XIPF = 457
+DX = 69420
+TRASH = 123456789
 import math
 n, m , a = map(int, input().split())
  

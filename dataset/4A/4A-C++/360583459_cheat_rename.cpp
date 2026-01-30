@@ -1,4 +1,3 @@
-// CHEAT: Renamed 1 vars
 #include <iostream>
  
 using namespace std;

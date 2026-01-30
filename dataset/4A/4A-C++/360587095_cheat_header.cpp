@@ -1,4 +1,3 @@
-// CHEAT: Header
 #define MAX_QNSU 663
 typedef long long ll_QNSU;
 #include<bits/stdc++.h>

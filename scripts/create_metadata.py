@@ -6,15 +6,14 @@ DATASET_ROOT = "dataset"
 OUTPUT_FILE = "dataset_metadata.csv"
 
 def create_metadata():
-    # Header của file CSV
     headers = [
-        "file_id",          # Tên file (duy nhất)
-        "file_path",        # Đường dẫn tương đối
-        "problem_id",       # Bài toán (1A, 4A...)
-        "language",         # Ngôn ngữ (C, C++, Python)
-        "is_plagiarism",    # 0: Gốc, 1: Cheat
-        "cheat_type",       # none, rename, comment, format...
-        "original_source"   # Nếu là cheat thì cheat từ file gốc nào?
+        "file_id", 
+        "file_path", 
+        "problem_id",
+        "language",
+        "is_plagiarism",
+        "cheat_type",
+        "original_source"
     ]
     
     rows = []
@@ -23,15 +22,13 @@ def create_metadata():
     for root, dirs, files in os.walk(DATASET_ROOT):
         for file in files:
             if file.startswith(".") or file == OUTPUT_FILE: continue
-            
-            # Phân tích đường dẫn: dataset / 1A / 1A-C / tên_file
+
             parts = root.split(os.sep)
             if len(parts) < 3: continue 
             
-            problem_id = parts[-2]  # VD: 1A
-            lang_raw = parts[-1]    # VD: 1A-C
+            problem_id = parts[-2]
+            lang_raw = parts[-1]
             
-            # Chuẩn hóa ngôn ngữ
             if "Python" in lang_raw: language = "python"
             elif "C++" in lang_raw: language = "cpp"
             elif "-C" in lang_raw: language = "c"
@@ -39,25 +36,20 @@ def create_metadata():
 
             rel_path = os.path.join(root, file).replace("\\", "/")
             
-            # Logic xác định Cheat hay Original
             if "_cheat_" in file:
                 is_plag = 1
-                # Tên file: 360446_cheat_rename.c
-                # Tách cheat_type: rename
                 try:
                     cheat_type = file.split("_cheat_")[1].split(".")[0]
                 except: cheat_type = "unknown"
                 
-                # Xác định file gốc: 360446.c
                 original_id = file.split("_cheat_")[0] + "." + file.split(".")[-1]
             else:
                 is_plag = 0
                 cheat_type = "none"
-                original_id = file # Chính là nó
+                original_id = file
 
             rows.append([file, rel_path, problem_id, language, is_plag, cheat_type, original_id])
 
-    # Ghi ra CSV
     with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(headers)

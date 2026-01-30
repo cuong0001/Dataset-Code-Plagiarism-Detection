@@ -1,7 +1,6 @@
-# CHEAT: Reformat
-w = int(input())
+w   =      int(   input()  )
 
-if w%2 == 0 and w>=3:
+if      w%2 == 0   and w  >=3:
   print("YES")
 else:
   print("NO")

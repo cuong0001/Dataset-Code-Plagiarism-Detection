@@ -1,3 +1,2 @@
-# CHEAT: Reformat
-x,y=input().split()
-print(int((int(x)*int(y))//2))
+x,y=             input(). split()
+print( int((     int(x)*int(y)     )// 2))

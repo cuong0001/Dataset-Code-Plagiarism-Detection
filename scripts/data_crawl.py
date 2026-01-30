@@ -4,7 +4,6 @@ import os
 import random
 import glob
 
-# --- CẤU HÌNH ---
 SUBMISSIONS_PER_LANG = 5  
 PROBLEMS_TO_CRAWL = 10    
 
@@ -13,7 +12,6 @@ PROBLEM_LIST = [
     ('282', 'A'), ('50', 'A'), ('112', 'A'), ('263', 'A'), ('281', 'A')
 ]
 
-# ID chuẩn Codeforces
 LANG_CONFIG = {
     'c':   {'id': '43', 'name': 'GNU C11'},       
     'cpp': {'id': '73', 'name': 'C++20 (64)'},   
@@ -37,10 +35,8 @@ def is_valid_language_relaxed(text, target_lang_key):
     text = text.lower().strip()
     
     if target_lang_key == 'c':
-        # Chỉ loại bỏ nếu thấy dấu hiệu rõ ràng của ngôn ngữ khác
         if any(x in text for x in ['++', 'script', 'java', 'py', 'sharp', 'clang++']):
             return False
-        # Nếu đã qua bộ lọc ID 43, thì mọi thứ còn lại đều chấp nhận là C
         return True 
         
     elif target_lang_key == 'cpp':
@@ -49,7 +45,6 @@ def is_valid_language_relaxed(text, target_lang_key):
         return 'python' in text or 'pypy' in text
     return False
 
-# --- HÀM CHỜ ---
 def wait_for_table_or_captcha(page):
     while True:
         if page.ele('css:table.status-frame-datatable'):
@@ -97,18 +92,12 @@ def get_submissions_debug(page, contest_id, problem_index, lang_key, count_neede
                 
                 if 'Accepted' not in row.ele('css:td:nth-child(6)').text: continue
                 
-                # --- DEBUG LOG ---
-                # In ra để xem tại sao nó skip
                 is_valid = is_valid_language_relaxed(lang_text, lang_key)
                 if not is_valid:
-                    # Chỉ in nếu nó từ chối, để bạn biết
-                    # print(f"      [Debug] Bỏ qua ID {s_id} vì Lang='{lang_text}' không khớp '{lang_key}'") 
                     continue
 
-                # Check file tồn tại
                 file_check = os.path.join(save_folder, f"{s_id}.{lang_key}")
                 if os.path.exists(file_check): 
-                    # print(f"      [Debug] Bỏ qua ID {s_id} vì đã có file.")
                     continue 
 
                 if s_id not in [x[0] for x in found_ids]:
@@ -121,7 +110,6 @@ def get_submissions_debug(page, contest_id, problem_index, lang_key, count_neede
             
         if len(found_ids) >= count_needed: break
         
-        # Click Next Page
         try:
             pagination_links = page.eles('css:.pagination ul li a')
             next_btn = None
