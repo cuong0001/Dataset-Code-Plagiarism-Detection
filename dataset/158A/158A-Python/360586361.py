@@ -1,0 +1,9 @@
+n,k=map(int,input().split())
+ 
+a=[*map(int,input().split())]
+a=a[:n]
+ 
+threshold = a[k-1]
+count = sum(1 for x in a if x >= threshold and x > 0)
+ 
+print(count)
