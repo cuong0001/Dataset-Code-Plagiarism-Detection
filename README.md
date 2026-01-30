@@ -74,13 +74,13 @@ To replicate the dataset generation process, follow these steps:
 2.  **Crawl Original Data:**
     This script uses `undetected-chromedriver` to fetch AC solutions from Codeforces.
     ```bash
-    python scripts/index.py
+    python scripts/data_crawl.py
     ```
 
 3.  **Generate Plagiarism:**
     Run the obfuscation engine to create synthetic plagiarism cases (5 variants per original file).
     ```bash
-    python scripts/plagiarism_code_generator.py
+    python scripts/plagiarism_code_gen.py
     ```
 
 4.  **Create Metadata:**
