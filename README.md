@@ -1,7 +1,7 @@
 # Source Code Plagiarism Detection Dataset
 
 ## 1. Project Overview
-This repository contains a curated dataset for source code plagiarism detection research. The dataset includes solutions for **30 algorithmic problems** from Codeforces, covering three programming languages: **C, C++, and Python**.
+This repository contains a curated dataset for source code plagiarism detection research. The dataset includes solutions for **10 algorithmic problems** from Codeforces, covering three programming languages: **C, C++, and Python**.
 
 The dataset is constructed using a hybrid approach:
 1.  **Collection:** Crawling original "Accepted" (AC) submissions from Codeforces.
