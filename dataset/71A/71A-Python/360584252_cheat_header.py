@@ -1,5 +1,9 @@
-# CHEAT: Header
 MAX_MXED = 701
+DX = 213321
+TRASH = 123456789
+import sys
+import re
+import random
 n = int(input())
  
 for _ in range(n):

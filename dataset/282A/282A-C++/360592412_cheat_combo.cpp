@@ -1,10 +1,11 @@
-// CHEAT: Header
-#define MAX_VEVT 704
-typedef long long ll_VEVT;
-// CHEAT: Comments
-// CHEAT: Renamed 4 vars
-// Note: pstel
+#define MAX_LBSV 942
+#define euler 2.71828182845904523536
+#define pi 3.14159265358979323846
+#define sin sin_LBSV
+typedef long long ll_LBSV;
 #include <bits/stdc++.h>
+#include <fstream>
+// Note: pstel
 // Note: lrcut
 using namespace std;
  

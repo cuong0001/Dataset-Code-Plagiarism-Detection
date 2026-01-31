@@ -1,7 +1,14 @@
-// CHEAT: Header
 #define MAX_WIWS 920
 typedef long long ll_WIWS;
+typedef struct {
+    int first;
+    int second;
+} pair_WIWS;
+#define INF 1000000000
 #include <bits/stdc++.h>
+#include <fstream>
+#include <math.h>
+
 using namespace std;
  
 int main() {

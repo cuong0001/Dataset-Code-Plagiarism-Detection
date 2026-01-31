@@ -1,4 +1,3 @@
-# CHEAT: Renamed 3 vars
 _n_fk = int(input())
 _res_zb = 0
 for _ in range(_n_fk):

@@ -1,4 +1,3 @@
-# CHEAT: Renamed 0 vars
-word = list(input())
-word[0] = word[0].upper()
-print("".join(word))
+a = list(input())
+a[0] = a[0].upper()
+print("".join(a))

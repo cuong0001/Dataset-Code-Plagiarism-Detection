@@ -1,4 +1,3 @@
-// CHEAT: Renamed 4 vars
 #include <bits/stdc++.h>
 using namespace std;
  
@@ -10,7 +9,7 @@ int main() {
     for (int _i_zm = 0; _i_zm < word.length(); _i_zm++) {
         if (_i_zm == 0) {
             int _i_zm = 0;
-            for (char _c_ce = '_a_yz'; _c_ce <= '_z_tm'; _c_ce++) {
+            for (char _c_ce = 'a'; _c_ce <= 'z'; _c_ce++) {
                 if (word[0] == _c_ce) {
                     word[0] = ALPHABET[_i_zm];
                     break;

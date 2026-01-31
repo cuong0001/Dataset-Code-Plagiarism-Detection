@@ -1,4 +1,8 @@
-# CHEAT: Header
+import sys
+import os
+MINe = 1
+e = 2.456
+pi = 3.14159
 MAX_KJLZ = 288
 arr=[]
 counter=0

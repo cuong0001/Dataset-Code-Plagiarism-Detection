@@ -1,34 +1,33 @@
-// CHEAT: Reformat
   #include <iostream>
 
 using namespace std;
 
-   int main()
+    int main()
 {
-  string firstInput, secondInput;
-   cin >> firstInput >> secondInput;
+      string firstInput, secondInput;
+  cin >> firstInput >> secondInput;
 
-for (int i = 0; i < firstInput.length(); i++)
+for       (int i = 0; i    < firstInput.length();   i++)
  {
-  char firstWord = tolower(firstInput[i]);
+      char firstWord = tolower(firstInput[i]);
 
-   char secondWord = tolower(secondInput[i]);
-if (firstWord < secondWord)
+            char secondWord = tolower(secondInput[i]);
+if    (firstWord < secondWord)
 {
-   cout << -1 << "\n";
+ cout << -1 << "\n";
 
- return 0;
+ return   0;
 
 }
  else if (firstWord > secondWord)
 
  {
-   cout << 1 << "\n";
-
-   return 0;
+cout << 1 << "\n";
+  
+return 0;
+}
    }
-   }
 
- cout << 0 << "\n";
+                          cout << 0 << "\n";
    return 0;
    }

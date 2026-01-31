@@ -1,5 +1,7 @@
-// CHEAT: Header
 #define MAX_KCJS 493
+typedef int ll_KCIS;
+#define LIM_KCJS 789
+#define INT_KCJS 2147483647
 typedef long long ll_KCJS;
 #include <iostream>
 #include <string>

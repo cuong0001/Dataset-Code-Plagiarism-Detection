@@ -1,4 +1,3 @@
-# CHEAT: Renamed 4 vars
 _n_tn = int(input().strip())
 count = 0
  

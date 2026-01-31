@@ -1,4 +1,3 @@
-// CHEAT: Comments
 #include<bits/stdc++.h>
 // Note: mjhou
 using namespace std;

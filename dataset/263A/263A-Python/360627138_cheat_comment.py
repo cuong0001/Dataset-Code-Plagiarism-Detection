@@ -1,4 +1,3 @@
-# CHEAT: Comments
 matrix =[
 # Note: cstpk
     [int(x) for x in input().split()],

@@ -1,4 +1,3 @@
-// CHEAT: Comments
 #include <stdio.h>
 #include <sys/types.h>
 #include <stdbool.h>

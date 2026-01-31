@@ -1,4 +1,3 @@
-// CHEAT: Renamed 2 vars
 #include <iostream>
 #include <string>
  

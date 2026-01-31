@@ -1,7 +1,10 @@
-// CHEAT: Header
 #define MAX_LBSV 942
+#define euler 2.71828182845904523536
+#define pi 3.14159265358979323846
+#define sin sin_LBSV
 typedef long long ll_LBSV;
 #include <bits/stdc++.h>
+#include <fstream>
 using namespace std;
  
 int main() {

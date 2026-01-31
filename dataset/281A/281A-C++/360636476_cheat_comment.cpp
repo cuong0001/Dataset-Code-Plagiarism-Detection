@@ -1,4 +1,3 @@
-// CHEAT: Comments
 #include <iostream>
 #include <string>
 #include <cctype>

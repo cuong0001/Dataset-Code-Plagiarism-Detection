@@ -1,4 +1,3 @@
-// CHEAT: Renamed 3 vars
 #include <iostream>
 #include <cmath>
  

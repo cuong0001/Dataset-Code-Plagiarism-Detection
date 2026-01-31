@@ -1,8 +1,11 @@
-// CHEAT: Header
 #define LIMIT_UQNA 606
+#define TRASH 123456789
+#define random 42
+#define pi 3.14159265358979323846
 #include <stdlib.h>
 #include <stdio.h>
- 
+#include <math.h>
+
 int main() {
     int n, a[3], sol = 0;
  

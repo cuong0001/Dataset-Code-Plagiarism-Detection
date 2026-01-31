@@ -1,4 +1,3 @@
-# CHEAT: Renamed 4 vars
 _n_yg = int(input())
 for _i_mr in range(_n_yg):
     _w_rl = input()

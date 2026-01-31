@@ -1,4 +1,3 @@
-// CHEAT: Renamed 2 vars
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

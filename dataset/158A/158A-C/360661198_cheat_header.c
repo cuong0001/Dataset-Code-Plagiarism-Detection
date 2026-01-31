@@ -1,7 +1,10 @@
-// CHEAT: Header
 #define LIMIT_ZSUZ 122
+#define ll long long
+#define _CRT_SECURE_NO_WARNINGS
+#define TRASH 123456789
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
  
 int main() {
     int n;

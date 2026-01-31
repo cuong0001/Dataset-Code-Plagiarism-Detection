@@ -1,4 +1,3 @@
-# CHEAT: Comments
 def main():
 # Note: zezom
     try:

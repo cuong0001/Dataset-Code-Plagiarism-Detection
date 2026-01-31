@@ -1,4 +1,3 @@
-// CHEAT: Comments
 #include <iostream>
 // Note: akmvv
 using namespace std;

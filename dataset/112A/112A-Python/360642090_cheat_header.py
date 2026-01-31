@@ -1,5 +1,8 @@
-# CHEAT: Header
 MAX_ELPZ = 943
+DX = 69420
+TRASH = 123456789   
+dwq = 123132
+import os
 first = input().lower()
 second = input().lower()
 comparison = 0

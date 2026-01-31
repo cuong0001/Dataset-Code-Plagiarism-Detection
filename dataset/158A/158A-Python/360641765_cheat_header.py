@@ -1,5 +1,8 @@
-# CHEAT: Header
 MAX_FTBE = 653
+DX = 67
+TRASH = 123456789
+import sys
+import math
 n , k = map(int, input().split())
 res = 0
 l = [int(i) for i in input().split()]

@@ -1,4 +1,3 @@
-# CHEAT: Comments
 str0 = input().lower()
 str1 = input().lower()
 # Note: vibdj

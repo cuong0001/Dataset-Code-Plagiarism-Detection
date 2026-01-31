@@ -1,6 +1,5 @@
-# CHEAT: Reformat
-string = list(input())
+string = list(   input())
 
-string[0] = string[0].upper()
+string[0]   =      string[0].upper()
 
-print("".join(string))
+print("".join(string)   )

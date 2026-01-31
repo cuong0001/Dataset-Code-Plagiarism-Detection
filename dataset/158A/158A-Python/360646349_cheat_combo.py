@@ -1,7 +1,9 @@
-# CHEAT: Header
 MAX_MONF = 940
-# CHEAT: Comments
-# CHEAT: Renamed 5 vars
+MAX_FTBE = 653
+DX = 67
+TRASH = 123456789
+import sys
+import math
 '''
 testcase = int(input())
 for _i_jo in range (testcase):

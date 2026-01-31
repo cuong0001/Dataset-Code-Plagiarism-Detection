@@ -1,5 +1,6 @@
-// CHEAT: Header
 #define LIMIT_IJJJ 827
+typedef long long ll_IJJJ;
+#define INF 1234567890
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>

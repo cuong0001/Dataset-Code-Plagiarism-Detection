@@ -1,4 +1,3 @@
-// CHEAT: Comments
 #include <iostream>
  
 using namespace std;

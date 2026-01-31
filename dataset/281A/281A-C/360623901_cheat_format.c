@@ -1,4 +1,3 @@
-// CHEAT: Reformat
   #include<stdio.h>
 
   #include<ctype.h>

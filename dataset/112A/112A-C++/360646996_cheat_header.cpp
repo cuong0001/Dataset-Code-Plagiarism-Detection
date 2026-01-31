@@ -1,6 +1,9 @@
-// CHEAT: Header
 #define MAX_JKCV 926
 typedef long long ll_JKCV;
+typedef unsigned long long ull_JKCV;
+typedef long double ld_JKCV;
+#define PI_JKCV 3.14159265358979323846
+#include <bits/stdc++.h>
 #include <iostream> 
 #include <string>  
 #include <cctype> 

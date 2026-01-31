@@ -1,7 +1,10 @@
-// CHEAT: Header
 #define MAX_YVYT 892
+#define INT_LLONG 9223372036854775807
+#define LIM_YVYT 987
 typedef long long ll_YVYT;
 #include <bits/stdc++.h>
+#include <iostream>
+#include <unordered_map>
 using namespace std;
  
  

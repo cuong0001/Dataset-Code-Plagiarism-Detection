@@ -1,4 +1,3 @@
-# CHEAT: Comments
 n = int(input()); s = ""
 # Note: siyxr
 while(n > 0):

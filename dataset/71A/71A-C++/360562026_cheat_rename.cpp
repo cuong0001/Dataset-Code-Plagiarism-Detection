@@ -1,4 +1,3 @@
-// CHEAT: Renamed 3 vars
 #include <bits/stdc++.h>
 using namespace std;
 int main()
@@ -16,7 +15,7 @@ int main()
         }else{
             cout<<_s_up;   
         }
-        cout<<"\_n_kz";
+        cout<<"\n";
         
     }
     return 0;

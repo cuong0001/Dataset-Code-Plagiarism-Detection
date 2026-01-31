@@ -1,5 +1,8 @@
-# CHEAT: Header
 MAX_JJPS = 876
+DX = 67
+TRASH = 123456789
+BIG = 1000000
+import requests
 n = int(input())
 count = 0
  

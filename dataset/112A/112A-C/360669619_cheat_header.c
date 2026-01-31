@@ -1,5 +1,7 @@
-// CHEAT: Header
 #define LIMIT_JIRT 400
+#define TRASH 123456789
+#define _CRT_SECURE_NO_WARNINGS
+#define LLONG 9223372036854775807
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

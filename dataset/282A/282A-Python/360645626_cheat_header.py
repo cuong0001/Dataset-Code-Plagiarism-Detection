@@ -1,5 +1,8 @@
-# CHEAT: Header
 MAX_APTR = 511
+import sys
+import os
+EX = 123456
+F = 654321
 '''
 testcase = int(input())
 for i in range (testcase):

@@ -1,4 +1,3 @@
-# CHEAT: Renamed 2 vars
 matrix = []
 for _i_ni in range(5):
     row = list(map(int, input().split()))

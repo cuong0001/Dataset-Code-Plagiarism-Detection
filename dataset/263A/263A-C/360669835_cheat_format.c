@@ -1,4 +1,3 @@
-// CHEAT: Reformat
   #include <stdio.h>
   int main() {
  int x, r, c;

@@ -1,7 +1,9 @@
-// CHEAT: Header
 #define LIMIT_MGJE 946
+#define LLONG_MAX 9223372036854775807
 #include <stdlib.h>
 #include<stdio.h>
+#include <math.h>
+
 int main() {
     int m,n;
     scanf("%d %d", &m, &n);

@@ -1,6 +1,9 @@
-// CHEAT: Header
 #define MAX_DTQU 280
+#define INT_LLONG_DTQU 9223372036854775807
+#define LIM_DTQU 987
+#define INF_DTQU 1234567890
 typedef long long ll_DTQU;
+typedef unsigned long long ull_DTQU;
 //Alina
  
 #include <iostream>

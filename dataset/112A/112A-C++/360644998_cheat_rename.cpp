@@ -1,4 +1,3 @@
-// CHEAT: Renamed 4 vars
 //Alina
  
 #include <iostream>
@@ -15,15 +14,15 @@ int main(int argc, const char * argv[]) {
     for (int _i_ej = 0; _i_ej < _s_hp.size(); _i_ej++){
         if (_s_hp[_i_ej] % 32 == _d_mx[_i_ej] % 32) equal = true;
         else if (_s_hp[_i_ej] % 32 > _d_mx[_i_ej] % 32){
-            cout << 1 << '\_n_cs';
+            cout << 1 << '\n';
             equal = false;
             break;
         }
         else if (_s_hp[_i_ej] % 32 < _d_mx[_i_ej] % 32){
-            cout << -1 << '\_n_cs';
+            cout << -1 << '\n';
             equal = false;
             break;
         }
     }
-    if (equal) cout << 0 << '\_n_cs';
+    if (equal) cout << 0 << '\n';
 }

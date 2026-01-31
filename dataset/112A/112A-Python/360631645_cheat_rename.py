@@ -1,10 +1,9 @@
-# CHEAT: Renamed 0 vars
-s1 = input().lower()
-s2 = input().lower()
+temp = input().lower()
+hello = input().lower()
  
-if s1 < s2:
+if temp < hello:
     print(-1)
-elif s1 > s2:
+elif temp > hello:
     print(1)
 else:
     print(0)
