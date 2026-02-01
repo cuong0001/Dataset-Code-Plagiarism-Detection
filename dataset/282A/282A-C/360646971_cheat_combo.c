@@ -9,28 +9,31 @@
 #include <string.h>
 // Note: rapjh
  
-int main(void) {
-    int _n_af, _sum_vw = 0;
+  int main(void) {
+int _n_af, _sum_vw = 0;
     // Note: rirbi
-    char _s_jz[4];
+        char _s_jz[4];
  
     scanf("%d", &_n_af);
  
-    for (int _i_fh = 0; _i_fh < _n_af; _i_fh++) {
+            for (int _i_fh = 0; _i_fh < _n_af; _i_fh++) {
     // Note: ckglw
-        scanf("%s", _s_jz);
+scanf("%s", _s_jz);
  
         if (strcmp(_s_jz, "X++") == 0 || strcmp(_s_jz, "++X") == 0) {
-            _sum_vw++;
+       _sum_vw++;
             // Note: ajaqq
-        }
-        else if (strcmp(_s_jz, "X--") == 0 || strcmp(_s_jz, "--X") == 0) {
+            }
+        else 
+        
+        
+        if (strcmp(_s_jz, "X--") == 0 || strcmp(_s_jz, "--X") == 0) {
         // Note: lcdpc
             _sum_vw--;
         }
     }
  
-    printf("%d\n", _sum_vw);
+            printf("%d\n", _sum_vw);
     // Note: fprxw
     return 0;
 }
