@@ -3,9 +3,11 @@
 ## 1. Project Overview
 This repository contains a curated dataset for source code plagiarism detection research. The dataset includes solutions for **10 algorithmic problems** from Codeforces, covering three programming languages: **C, C++, and Python**.
 
-The dataset is constructed using a hybrid approach:
+The dataset is constructed using three steps:
 1.  **Collection:** Crawling original "Accepted" (AC) submissions from Codeforces.
 2.  **Augmentation:** Generating synthetic plagiarism cases using obfuscation techniques (lexical and structural changes).
+3.  **Manual Injection:** Inject more changes to the plagiarism codes to make them more difficult to detect, and make sure the codes still have the same logic.
+
 
 ## 2. Dataset Statistics
 * **Total Files:** 300 source code files.
