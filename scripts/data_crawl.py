@@ -1,139 +1,144 @@
+import requests
 from DrissionPage import ChromiumPage, ChromiumOptions
 import time
 import os
-import random
 import glob
+import random
 
-SUBMISSIONS_PER_LANG = 5  
-PROBLEMS_TO_CRAWL = 10    
-
+SUBMISSIONS_PER_LANG = 5   
 PROBLEM_LIST = [
-    ('4', 'A'), ('71', 'A'), ('158', 'A'), ('1', 'A'), ('231', 'A'),
-    ('282', 'A'), ('50', 'A'), ('112', 'A'), ('263', 'A'), ('281', 'A')
+    ('4', 'A'), ('1', 'A'), ('50', 'A'), ('71', 'A'), ('112', 'A'),
+    ('158', 'A'), ('231', 'A'), ('263', 'A'), ('281', 'A'), ('282', 'A')
 ]
 
-LANG_CONFIG = {
-    'c':   {'id': '43', 'name': 'GNU C11'},       
-    'cpp': {'id': '73', 'name': 'C++20 (64)'},   
-    'py':  {'id': '87', 'name': 'PyPy 3-64'}      
+LANG_MAP = {
+    'c':   {'matches': ['GNU C11', 'GNU C23', 'Clang'], 'exclude': ['++', 'sharp'], 'ext': '.c'},
+    'cpp': {'matches': ['C++', 'G++', 'Clang++'],      'exclude': [],               'ext': '.cpp'},
+    'py':  {'matches': ['Python', 'PyPy'],             'exclude': [],               'ext': '.py'}
 }
 
-def check_progress(folder_path):
-    if not os.path.exists(folder_path):
-        return {'cpp': 0, 'py': 0, 'c': 0}
-    cpp_count = len(glob.glob(os.path.join(folder_path, "*.cpp")))
-    py_count = len(glob.glob(os.path.join(folder_path, "*.py")))
-    c_files = glob.glob(os.path.join(folder_path, "*.c"))
-    c_count = len([f for f in c_files if not f.endswith(".cpp")])
-    return {'cpp': cpp_count, 'py': py_count, 'c': c_count}
+FOLDER_SUFFIX_MAP = {
+    'c': '-C',
+    'cpp': '-C++',
+    'py': '-Python'
+}
 
-def is_valid_language_relaxed(text, target_lang_key):
+def check_progress(base_folder, problem_name):
     """
-    Hàm kiểm tra DỄ TÍNH hơn.
-    Vì đã lọc bằng ID trên URL, ta chỉ cần loại trừ các trường hợp sai hẳn.
+    Kiểm tra tiến độ trong các SUBFOLDER riêng biệt.
+    Ví dụ: dataset/4A/4A-C/
     """
-    text = text.lower().strip()
+    if not os.path.exists(base_folder):
+        return {'cpp': 0, 'py': 0, 'c': 0}
     
-    if target_lang_key == 'c':
-        if any(x in text for x in ['++', 'script', 'java', 'py', 'sharp', 'clang++']):
-            return False
-        return True 
+    counts = {}
+    for lang_key in ['c', 'cpp', 'py']:
+        sub_folder_name = f"{problem_name}{FOLDER_SUFFIX_MAP[lang_key]}"
+        sub_folder_path = os.path.join(base_folder, sub_folder_name)
         
-    elif target_lang_key == 'cpp':
-        return 'c++' in text or 'g++' in text
-    elif target_lang_key == 'py':
-        return 'python' in text or 'pypy' in text
+        if os.path.exists(sub_folder_path):
+            ext = LANG_MAP[lang_key]['ext']
+            counts[lang_key] = len(glob.glob(os.path.join(sub_folder_path, f"*{ext}")))
+        else:
+            counts[lang_key] = 0
+            
+    return counts
+
+def is_target_language(api_lang_str, target_lang_key):
+    api_lang_str = api_lang_str.lower()
+    config = LANG_MAP[target_lang_key]
+    
+    for exc in config['exclude']:
+        if exc.lower() in api_lang_str: return False
+        
+    for m in config['matches']:
+        if m.lower() in api_lang_str: return True
+        
     return False
 
-def wait_for_table_or_captcha(page):
-    while True:
-        if page.ele('css:table.status-frame-datatable'):
-            return True 
-        title = page.title.lower()
-        if "attention" in title or "moment" in title or "security" in title:
-            print("   [!!!] CLOUDFLARE CHẶN! GIẢI CAPTCHA ĐI BẠN ƠI...", end='\r')
-        else:
-            print("   [...] Đang đợi bảng danh sách...", end='\r')
-        time.sleep(1)
-
-def wait_for_code_or_captcha(page):
-    while True:
-        if page.ele('#program-source-text'):
-            return True
-        title = page.title.lower()
-        if "attention" in title or "moment" in title or "security" in title:
-            print("   [!!!] CLOUDFLARE CHẶN! GIẢI CAPTCHA ĐI BẠN ƠI...", end='\r')
-        else:
-            print("   [...] Đang đợi code hiện ra...", end='\r')
-        time.sleep(1)
-
-def get_submissions_debug(page, contest_id, problem_index, lang_key, count_needed, save_folder):
-    found_ids = []
-    base_url = f"https://codeforces.com/contest/{contest_id}/status?problem={problem_index}&verdict=OK&programTypeId={LANG_CONFIG[lang_key]['id']}"
+def get_submission_ids_from_api_deep_scan(contest_id, problem_index, needed_counts):
+    found_submissions = {'c': [], 'cpp': [], 'py': []}
     
-    print(f"   -> [Start] Đang tìm {count_needed} bài {LANG_CONFIG[lang_key]['name']} MỚI...")
-    page.get(base_url)
+    BATCH_SIZE = 2000      
+    MAX_SEARCH_DEPTH = 200000
+    current_from = 1       
     
-    current_page_num = 1
-    
-    while len(found_ids) < count_needed:
-        wait_for_table_or_captcha(page)
-        
-        if current_page_num % 5 == 0 or current_page_num == 1:
-            print(f"      ...Đang quét trang {current_page_num}...")
-            
-        rows = page.eles('css:table.status-frame-datatable tr')
-        
-        for row in rows:
-            if not row.ele('tag:td'): continue
-            try:
-                s_id = row.ele('css:td:nth-child(1)').text.strip()
-                lang_text = row.ele('css:td:nth-child(5)').text.strip()
-                
-                if 'Accepted' not in row.ele('css:td:nth-child(6)').text: continue
-                
-                is_valid = is_valid_language_relaxed(lang_text, lang_key)
-                if not is_valid:
-                    continue
+    while current_from < MAX_SEARCH_DEPTH:
+        is_full = True
+        for lang in ['c', 'cpp', 'py']:
+            if len(found_submissions[lang]) < needed_counts[lang]:
+                is_full = False
+                break
+        if is_full:
+            print(f"   [API] Đã tìm ĐỦ số lượng cần thiết. Dừng quét.")
+            break
 
-                file_check = os.path.join(save_folder, f"{s_id}.{lang_key}")
-                if os.path.exists(file_check): 
-                    continue 
-
-                if s_id not in [x[0] for x in found_ids]:
-                    ext = f".{lang_key}"
-                    found_ids.append((s_id, ext))
-                    print(f"      + [CHỌN] Tìm thấy bài MỚI: {s_id} ({lang_text})")
-                    
-                if len(found_ids) >= count_needed: break
-            except: continue
-            
-        if len(found_ids) >= count_needed: break
+        url = f"https://codeforces.com/api/contest.status?contestId={contest_id}&from={current_from}&count={BATCH_SIZE}"
+        print(f"   [API] Đang quét batch từ {current_from} đến {current_from + BATCH_SIZE}...")
         
         try:
-            pagination_links = page.eles('css:.pagination ul li a')
-            next_btn = None
-            for link in pagination_links:
-                if "→" in link.text:
-                    next_btn = link
-                    break
+            resp = requests.get(url, timeout=15).json()
+            if resp['status'] != 'OK':
+                print(f"   [API Error] {resp.get('comment')}")
+                if 'limit exceeded' in str(resp.get('comment')).lower():
+                    print("   -> Đợi 5s...")
+                    time.sleep(5)
+                    continue
+                else:
+                    break 
             
-            if next_btn:
-                page.scroll.to_bottom()
-                time.sleep(20)
-                next_btn.click()
-                current_page_num += 1
-                time.sleep(random.uniform(2, 3))
-            else:
-                print("      [Info] Đã hết trang.")
-                break
+            submissions = resp['result']
+            if not submissions:
+                print("   [API] Hết dữ liệu bài nộp.")
+                break 
+            
+            for sub in submissions:
+                if sub.get('verdict') != 'OK': continue
+                if sub['problem']['index'] != problem_index: continue
+                
+                lang_str = sub.get('programmingLanguage', '')
+                s_id = sub['id']
+                
+                for lang_key in ['c', 'cpp', 'py']:
+                    if len(found_submissions[lang_key]) < needed_counts[lang_key]:
+                        if is_target_language(lang_str, lang_key):
+                            if s_id not in found_submissions[lang_key]:
+                                found_submissions[lang_key].append(s_id)
+            
+            print(f"   -> Tiến độ Session này: C: {len(found_submissions['c'])}/{needed_counts['c']}, Py: {len(found_submissions['py'])}, C++: {len(found_submissions['cpp'])}")
+            
+            current_from += BATCH_SIZE
+            time.sleep(5) 
+            
         except Exception as e:
-            print(f"      [Lỗi Next Page] {e}")
-            break
-        
-    return found_ids
+            print(f"   [API Error] {e}")
+            time.sleep(5)
+            
+    return found_submissions
 
-def run_scraper():
+def download_code_direct(page, contest_id, submission_id, save_path):
+    url = f"https://codeforces.com/contest/{contest_id}/submission/{submission_id}"
+    try:
+        page.get(url)
+        start_wait = time.time()
+        while time.time() - start_wait < 10:
+            if "attention" in page.title.lower() or "security" in page.title.lower():
+                print("      [!] Cloudflare check...", end='\r')
+                time.sleep(2)
+                continue
+
+            if page.ele('#program-source-text'):
+                code_text = page.ele('#program-source-text').text
+                if len(code_text) < 5: return False
+                with open(save_path, "w", encoding="utf-8") as f:
+                    f.write(code_text)
+                return True
+            time.sleep(0.5)
+    except Exception as e:
+        print(f"      Err: {e}")
+    return False
+
+def run_downloader():
     print("Đang kết nối Chrome (Cổng 9111)...")
     co = ChromiumOptions().set_local_port(9111).auto_port()
     try:
@@ -142,64 +147,61 @@ def run_scraper():
         print("Lỗi: Không tìm thấy Chrome.")
         return
 
-    if "enter" in page.url or "codeforces.com" not in page.url:
-        page.get("https://codeforces.com/enter")
-        input("\n>>> HÃY ĐĂNG NHẬP RỒI BẤM ENTER TẠI ĐÂY...")
+    print("\n" + "="*50)
+    print(">>> ĐANG MỞ TRANG ĐĂNG NHẬP...")
+    print(">>> VUI LÒNG ĐĂNG NHẬP TRÊN TRÌNH DUYỆT RỒI BẤM ENTER TẠI ĐÂY.")
+    print("="*50 + "\n")
     
+    page.get("https://codeforces.com/enter")
+    input(">>> (Bấm Enter khi đã sẵn sàng...)")
+
     for contest_id, problem_index in PROBLEM_LIST:
         problem_name = f"{contest_id}{problem_index}"
-        save_folder = os.path.join("dataset", problem_name)
-        os.makedirs(save_folder, exist_ok=True)
         
-        current_counts = check_progress(save_folder)
+        base_folder = os.path.join("dataset", problem_name)
+        os.makedirs(base_folder, exist_ok=True)
+        
+        curr = check_progress(base_folder, problem_name)
         needed = {
-            'cpp': max(0, SUBMISSIONS_PER_LANG - current_counts['cpp']),
-            'py': max(0, SUBMISSIONS_PER_LANG - current_counts['py']),
-            'c': max(0, SUBMISSIONS_PER_LANG - current_counts['c'])
+            'c': max(0, SUBMISSIONS_PER_LANG - curr['c']),
+            'cpp': max(0, SUBMISSIONS_PER_LANG - curr['cpp']),
+            'py': max(0, SUBMISSIONS_PER_LANG - curr['py'])
         }
         
         if sum(needed.values()) == 0:
-            print(f"-> [SKIP] {problem_name} đã đủ bài.")
+            print(f"\n[SKIP] {problem_name} đã đủ bài.")
             continue
-
-        print(f"\n--- Xử lý bài {problem_name} ---")
+            
+        print(f"\n--- Đang Deep Scan bài {problem_name} (Thiếu: C:{needed['c']}...) ---")
         
-        all_targets = []
-        for lang_key, count in needed.items():
-            if count > 0:
-                targets = get_submissions_debug(page, contest_id, problem_index, lang_key, count, save_folder)
-                all_targets.extend(targets)
-
-        if not all_targets:
-            print(f"   ! Không tìm thêm được bài nào MỚI.")
+        target_ids = get_submission_ids_from_api_deep_scan(contest_id, problem_index, needed)
+        
+        total_found = sum(len(x) for x in target_ids.values())
+        if total_found == 0:
+            print("   ! Không tìm thấy bài nào dù đã quét sâu.")
             continue
-
-        print(f"\n-> Bắt đầu tải {len(all_targets)} code MỚI...")
+            
+        print(f"   -> Tổng tìm được {total_found} bài. Bắt đầu tải...")
         
-        for s_id, extension in all_targets:
-            filename = os.path.join(save_folder, f"{s_id}{extension}")
-            if os.path.exists(filename): continue
+        for lang, ids in target_ids.items():
+            sub_folder_name = f"{problem_name}{FOLDER_SUFFIX_MAP[lang]}"
+            final_save_dir = os.path.join(base_folder, sub_folder_name)
+            os.makedirs(final_save_dir, exist_ok=True)
 
-            url = f"https://codeforces.com/contest/{contest_id}/submission/{s_id}"
-            try:
-                page.get(url)
+            for s_id in ids:
+                ext = LANG_MAP[lang]['ext']
+                filename = os.path.join(final_save_dir, f"{s_id}{ext}")
                 
-                wait_for_code_or_captcha(page)
+                if os.path.exists(filename): continue
                 
-                code_element = page.ele('#program-source-text')
-                if code_element and len(code_element.text) > 5:
-                    with open(filename, "w", encoding="utf-8") as f:
-                        f.write(code_element.text)
-                    print(f"   [OK] Đã lưu {s_id}{extension}")
+                print(f"      Downloading {s_id} ({lang}) vào {sub_folder_name}...", end="")
+                success = download_code_direct(page, contest_id, s_id, filename)
+                
+                if success:
+                    print(" [OK]")
+                    time.sleep(random.uniform(6, 8))
                 else:
-                    print(f"   [!] Code rỗng {s_id}")
-                
-                time.sleep(random.uniform(4, 7)) 
-
-            except Exception as e:
-                print(f"   Err {s_id}: {e}")
-
-        print(f"--- Hoàn tất {problem_name} ---")
+                    print(" [Fail]")
 
 if __name__ == "__main__":
-    run_scraper()
+    run_downloader()
